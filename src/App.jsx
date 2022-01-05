@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import { useWeb3 } from "@3rdweb/hooks";
 import { ethers } from "ethers";
+import { UnsupportedChainIdError } from "@web3-react/core";
 
 // instantiate the sdk on rinkeby.
 const sdk = new ThirdwebSDK("rinkeby");
@@ -179,6 +180,18 @@ const mintNft = () => {
     });
   }, [address]);
 
+  if (error instanceof UnsupportedChainIdError ) {
+    return (
+      <div className="unsupported-network">
+        <h2>Please connect to Rinkeby</h2>
+        <p>
+          This dapp only works on the Rinkeby network, please switch networks
+          in your connected wallet.
+        </p>
+      </div>
+    );
+  }
+
   if(!address) {
     return (
       <div className='landing'>
@@ -351,7 +364,7 @@ const mintNft = () => {
   // Render mint nft screen.
   return (
     <div className="mint-nft">
-      <h1>Mint your free 🍪DAO Membership NFT</h1>
+      <h1>Mint your free 🔮 Magic DAO Membership NFT</h1>
       <button
         disabled={isClaiming}
         onClick={() => {
